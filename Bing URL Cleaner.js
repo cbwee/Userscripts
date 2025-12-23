@@ -7,8 +7,14 @@
 // @grant        none
 // ==/UserScript==
 
-(function c(l,r){
-  let h=l.href,n=h.replace(/([?&])form=[^&]*&?/ig,'$1').replace(/[?&]$/,'');
-  if(h!==r)h!==n?history.replaceState(0,0,r=n):r=h;
-  requestAnimationFrame(()=>c(l,r));
-})(location);
+(function(){
+  let p = history.pushState;
+  let c = () => {
+    let h = location.href;
+    let n = h.replace(/([?&])form=[^&]*&?/ig,'$1').replace(/[?&]$/,'');
+    if (h !== n) history.replaceState(null,null,n);
+  };
+  history.pushState = (...a) => { p.apply(history,a); c() };
+  addEventListener('popstate', c);
+  c();
+})();
