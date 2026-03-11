@@ -1,0 +1,48 @@
+// ==UserScript==
+// @name         ChatGPT Lag Fixer
+// @version      1.0
+// @description  Show ChatGPT messages in batches
+// @match        https://chatgpt.com/*
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_registerMenuCommand
+// ==/UserScript==
+(function() {
+  'use strict'
+  let a = [], o = 0, b = null, s = GM_getValue("batchSize", 25)
+
+  function update() {
+    a = document.querySelectorAll('article[data-testid^="conversation-turn-"]')
+  }
+
+  function trim() {
+    update()
+    let l = a.length, v = Math.min((o + 1) * s, l), h = l - v, f = l - v
+    for (let i = 0; i < l; i++) a[i].style.display = i >= f ? '' : 'none'
+    if (b) b.remove()
+    let x = document.createElement('button')
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    x.style.cssText = `padding:8px 14px;background:transparent;color:${dark ? 'white' : 'black'};border:1px solid ${dark ? 'white' : 'black'};border-radius:18px;cursor:pointer`
+    x.innerText = v >= l ? "All messages are shown" : `Show ${Math.min(s, h)} more (${h} hidden)`
+    x.onclick = () => { o++; trim() }
+    let w = document.createElement('div')
+    w.style.cssText = "display:flex;justify-content:center;margin:16px 0"
+    w.appendChild(x)
+    let g = v >= l ? a[0] : a[f]
+    if (g && g.parentNode) g.parentNode.insertBefore(w, g)
+    b = w
+  }
+
+  GM_registerMenuCommand("Set Batch Size", () => {
+    let i = prompt("Enter batch size (5-100):", s), n = parseInt(i, 10)
+    if (!isNaN(n) && n >= 5 && n <= 100) {
+      GM_setValue("batchSize", n)
+      s = n
+      alert(`Batch size set to ${n}. Reload page to apply.`)
+    }
+  })
+
+  document.addEventListener('DOMContentLoaded', trim)
+  window.addEventListener('load', trim)
+  setInterval(trim, 2000)
+})();
