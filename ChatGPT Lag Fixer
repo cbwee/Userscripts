@@ -13,7 +13,7 @@
 
 let s = GM_getValue("batchSize", 25), o = 0, b = null, st = null
 let d = matchMedia('(prefers-color-scheme: dark)').matches, ll = 0, lv = -1
-let mo = null
+let mo = null, io = null
 
 function q() { return document.querySelectorAll('article[data-testid^="conversation-turn-"]') }
 
@@ -28,6 +28,7 @@ function trim() {
 article[data-testid^="conversation-turn-"]:nth-last-child(-n+${v}){display:block}`
 
   if (b && b.parentNode) b.parentNode.removeChild(b)
+  if (io) { io.disconnect(); io = null }
 
   if (v < l) {
     if (!b) {
@@ -38,13 +39,19 @@ article[data-testid^="conversation-turn-"]:nth-last-child(-n+${v}){display:block
       x.onclick = () => { o++; trim() }
       b.appendChild(x)
     }
+
     let f = a[l - v]
     if (f && f.parentNode) {
       let btn = b.firstChild
       btn.innerText = `Show ${Math.min(s,h)} more → ${h} left`
-      requestAnimationFrame(() => {
-        if (f.parentNode && b.parentNode !== f.parentNode) f.parentNode.insertBefore(b, f)
-      })
+
+      io = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && f.parentNode && b.parentNode !== f.parentNode) {
+          f.parentNode.insertBefore(b, f)
+          io.disconnect(); io = null
+        }
+      }, { root: null, threshold: 0 })
+      io.observe(f)
     }
   }
 }
