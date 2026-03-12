@@ -7,4 +7,4 @@
 // @grant        none
 // ==/UserScript==
 
-(()=>{let a=0,b;requestAnimationFrame(b=()=>{document.querySelector('.login-btn-hdPJi')?.click()||a++<25&&requestAnimationFrame(b)})})();
+(()=>{let a=0,b;requestAnimationFrame(b=()=>{document.querySelector('.login-btn-hdPJi')?.click()||a++<50&&requestAnimationFrame(b)})})();
