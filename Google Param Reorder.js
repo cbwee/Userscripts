@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Google Param Reorder
-// @version      1.0
+// @name         Google Param Reorder
+// @version      1.0
 // @description
-// @match        https://www.google.com/search*
-// @grant        none
+// @match        https://www.google.com/search*
+// @grant        none
 // @run-at       document-start
 // ==/UserScript==
 
