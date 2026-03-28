@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name         Google Param Reorder
-// @version      1.0
+// @name         Google Param Reorder
+// @version      1.0
 // @description
-// @match        https://www.google.com/search*
-// @grant        none
-// @run-at       document-start
-// ==UserScript==
+// @match         https://www.google.com/search*
+// @grant         none
+// @run-at       document-start
+// ==/UserScript==
 
 (function (l) {
   var s = l.search, i = s.indexOf("&q=");
