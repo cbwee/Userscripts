@@ -1,15 +1,15 @@
 // ==UserScript==
-// @name         Google Param Reorder
-// @version      1.0
+// @name         Google Param Reorder
+// @version      1.0
 // @description
-// @match        https://www.google.com/search*
-// @grant        none
+// @match        https://www.google.com/search*
+// @grant        none
+// @run-at       document-start
 // ==/UserScript==
 
-(function(){
-  const u = new URL(location.href), p = u.searchParams
-  if (!p.has('q')) return
-  const v = p.get('q'); p.delete('q')
-  const n = new URLSearchParams([['q', v], ...p])
-  history.replaceState(null, '', u.origin + u.pathname + '?' + n)
-})();
+(function (l) {
+  var s = l.search;
+  if (!s || s.indexOf("?q=") === 0) return;
+  var m = s.match(/[?&](q=[^&]+)/);
+  if (m) history.replaceState(null, "", "?" + m[1] + s.replace(m[0], "").replace("?", "&") + l.hash);
+})(location);
