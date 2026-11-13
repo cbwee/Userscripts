@@ -8,7 +8,7 @@
 // ==/UserScript==
 
 (function() {
-  const k = ['q', 'first', 'filters', 'setlang', 'nfpr'];
+  const k = ['q', 'first', 'count', 'filters', 'setlang', 'nfpr', 'mkt', 'cc', 'adlt'];
   const p = history.pushState, r = history.replaceState;
   const c = () => {
     const u = new URL(location.href);
