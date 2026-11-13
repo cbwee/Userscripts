@@ -13,17 +13,16 @@
   const p = history.pushState, r = history.replaceState;
   const c = () => {
     if (!location.search) return;
-    const q = [], a = [];
+    const u = new URL(location.href), q = [], a = [];
     let changed = false;
-    for (const [x, v] of new URLSearchParams(location.search)) {
+    for (const [x, v] of u.searchParams) {
       if (!k.has(x.toLowerCase())) changed = true;
       else if (x.toLowerCase() === 'q') { if (a.length) changed = true; q.push([x, v]) }
       else a.push([x, v]);
     }
     if (!changed) return;
-    const s = new URLSearchParams();
-    for (const [x, v] of q.concat(a)) s.append(x[0], x[1]);
-    r.call(history, history.state, '', location.pathname + '?' + s + location.hash);
+    u.search = new URLSearchParams([...q, ...a]);
+    r.call(history, history.state, '', u);
   };
   history.pushState = function(...a) { p.apply(this, a); c() };
   history.replaceState = function(...a) { r.apply(this, a); c() };
