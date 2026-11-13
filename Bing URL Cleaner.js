@@ -7,14 +7,17 @@
 // @grant        none
 // ==/UserScript==
 
-(function(){
-  let p = history.pushState;
-  let c = () => {
-    let h = location.href;
-    let n = h.replace(/([?&])form=[^&]*&?/ig,'$1').replace(/[?&]$/,'');
-    if (h !== n) history.replaceState(null,null,n);
+(function() {
+  const k = ['q', 'first', 'filters', 'setlang', 'nfpr'];
+  const p = history.pushState, r = history.replaceState;
+  const c = () => {
+    const u = new URL(location.href);
+    [...u.searchParams.keys()].forEach(x => !k.includes(x.toLowerCase()) && u.searchParams.delete(x));
+    if (u.href !== location.href) r.call(history, history.state, '', u);
   };
-  history.pushState = (...a) => { p.apply(history,a); c() };
+  history.pushState = function(...a) { p.apply(this, a); c() };
+  history.replaceState = function(...a) { r.apply(this, a); c() };
   addEventListener('popstate', c);
+  addEventListener('pageshow', c);
   c();
 })();
