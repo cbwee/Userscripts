@@ -10,13 +10,15 @@
 
 (function() {
   const k = new Set(['q', 'first', 'start', 'filters', 'qft', 'tbs', 'udm', 'tbm', 'setlang', 'hl', 'mkt', 'gl', 'cc', 'lr', 'cr', 'uule', 'adlt', 'safe', 'nfpr', 'filter', 'pws', 'as_q', 'as_epq', 'as_oq', 'as_eq', 'as_nlo', 'as_nhi', 'as_sitesearch', 'as_filetype', 'as_occt', 'as_dt', 'as_ft', 'as_rights', 'as_drrb']);
+  const g = new Set(['num', 'sca_esv', 'sxsrf', 'fbs', 'vsint', 'aep', 'ntc', 'cs', 'sa', 'ved', 'biw', 'bih', 'dpr', 'mstk', 'csuir', 'mtid']);
   const p = history.pushState, r = history.replaceState;
   const c = () => {
     if (!location.search) return;
     const u = new URL(location.href), q = [], a = [];
+    const k2 = u.searchParams.has('udm') ? new Set([...k, ...g]) : k;
     let changed = false;
     for (const [x, v] of u.searchParams) {
-      if (!k.has(x.toLowerCase())) changed = true;
+      if (!k2.has(x.toLowerCase())) changed = true;
       else if (x.toLowerCase() === 'q') { if (a.length) changed = true; q.push([x, v]) }
       else a.push([x, v]);
     }
